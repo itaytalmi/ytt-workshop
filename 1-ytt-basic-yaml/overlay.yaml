@@ -1,0 +1,43 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#@ if data.values.ip_address and data.values.cidr and data.values.gateway:
+#@ ip_cidr_notation = data.values.ip_address + "/" + data.values.cidr
+#@overlay/match by=overlay.subset({"network":{"version": 2}})
+---
+network:
+  ethernets:
+    ens192:
+      #@overlay/remove
+      dhcp4: true
+      #@overlay/match missing_ok=True
+      addresses: #@ [ip_cidr_notation]
+      #@overlay/match missing_ok=True
+      routes:
+        - to: default
+          via: #@ data.values.gateway
+#@ end
+#@ if data.values.dns_servers:
+#@overlay/match by=overlay.subset({"network":{"version": 2}})
+---
+network:
+  version: 2
+  ethernets:
+    ens192:
+      #@overlay/match missing_ok=True
+      nameservers:
+        addresses: #@ data.values.dns_servers.split(",")
+#@ end
+
+#@ if data.values.search_paths:
+#@overlay/match by=overlay.subset({"network":{"version": 2}})
+---
+network:
+  version: 2
+  ethernets:
+    ens192:
+      #@overlay/match missing_ok=True
+      nameservers:
+        #@overlay/match missing_ok=True
+        search: #@ data.values.search_paths.split(",")
+#@ end
