@@ -163,3 +163,15 @@ ytt -f values.yaml -f base.yaml -f overlay.yaml \
 -v dns_servers="192.168.2.1,192.168.2.2" \
 -v search_paths="mydomain.com,mydomain.io"
 ```
+
+## Using Comments
+
+Since ytt uses `#` to load its modules, define variables, functions, etc., you should not use it to set comments in your YAML manifests like you probably do in other YAML manifests.
+
+While using the standard `#` method for YAML comments is possible and may work with ytt, it is discouraged to avoid tricky errors that can go unchecked. You might face errors such as `Unknown comment syntax` in some situations. The recommended approach is when writing ytt templated files, use ytt comments:
+
+```yaml
+#! This is a ytt comment. It's like she-bang!
+```
+
+There is also a sample comment you can refer to in our `base.yaml` from this workshop.

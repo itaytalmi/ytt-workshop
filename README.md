@@ -9,6 +9,7 @@ To follow along with the workshops, you must have the following:
 - ytt CLI installed
 - kapp CLI installed
 - imgpkg CLI installed
+- Tanzu CLI installed
 - kubectl CLI installed
 - Access to a Tanzu Kubernetes cluster
 
@@ -22,4 +23,8 @@ Note: since ytt, kapp and imgpkg are all part of the Carvel suite, it may be eas
 
 [Workshop 3 - Using ytt Overlays for TKG Packages](./3-ytt-overlays-tkg-packages)
 
-[Workshop 4 - Using Comments in ytt](./4-ytt-comments)
+## Additional References
+
+- [ytt Interactive Playground](https://carvel.dev/ytt/#playground)
+- [ytt Documentation](https://carvel.dev/ytt/docs/latest)
+- [Carvel Terraform Provider](https://github.com/carvel-dev/terraform-provider-carvel/tree/develop/examples)
