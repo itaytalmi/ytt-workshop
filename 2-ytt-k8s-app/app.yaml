@@ -1,0 +1,43 @@
+#@ load("@ytt:data", "data")
+
+#@ def labels():
+app: #@ data.values.app_name
+#@ end
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ data.values.namespace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: #@ data.values.namespace
+  name: #@ data.values.app_name
+spec:
+  selector:
+    matchLabels: #@ labels()
+  template:
+    metadata:
+      labels: #@ labels()
+    spec:
+      containers:
+      - name: #@ data.values.app_name
+        image: #@ data.values.app_image
+        ports:
+        - name: http
+          containerPort: #@ data.values.app_port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: #@ data.values.namespace
+  name: #@ data.values.app_name
+  labels: #@ labels()
+spec:
+  type: #@ data.values.svc_type
+  ports:
+  - port: #@ data.values.svc_port
+    targetPort: http
+  selector: #@ labels()

@@ -1,10 +1,10 @@
-# YTT Basic YAML
+# ytt - Basic YAML Manifests
 
-This example demonstrates YTT templating for a simple YAML file.
-The YAML manifest is a real Netplan manifest. Since a Netplan configuration can contain many different options, YTT can handle the logic for the different conditions.
+This example demonstrates ytt templating for a simple YAML file.
+The YAML manifest is a real Netplan manifest. Since a Netplan configuration can contain many different options, ytt can handle the logic for the different conditions.
 This example aims to demonstrate how to manipulate and template this YAML file.
 
->Note that the YTT syntax is based on Starlark, which is heavily influenced by Python. If you are familiar with Python, you will notice many similarities.
+>Note that the ytt syntax is based on Starlark, which is heavily influenced by Python. If you are familiar with Python, you will notice many similarities.
 
 ## Read Base YAML
 
@@ -19,7 +19,7 @@ network:
       dhcp4: true
 ```
 
-To read this file using YTT, you can run:
+To read this file using ytt, you can run:
 
 ```bash
 ytt -f base.yaml
@@ -29,8 +29,8 @@ The output will be the content of the file. This is the basic Netplan configurat
 
 ## Apply YAML Logic and Customizations
 
-The `base.yaml` manifest only contains DHCP configuration, but Netplan also supports specifying static IP configuration. Using YTT, we can apply logic and conditions to manipulate and template our manifest.
-In this exercise, we want to allow the user to specify a static IP configuration, and use YTT to apply the logic to the manifest based on the provided parameters.
+The `base.yaml` manifest only contains DHCP configuration, but Netplan also supports specifying static IP configuration. Using ytt, we can apply logic and conditions to manipulate and template our manifest.
+In this exercise, we want to allow the user to specify a static IP configuration, and use ytt to apply the logic to the manifest based on the provided parameters.
 
 We will now be working with the `overlay.yaml` file to implement the templating logic.
 
@@ -78,10 +78,10 @@ Then, the `overlay/match` method is used to locate the YAML document in the mani
 
 By using the `#@overlay/remove` method, we remove the `dhcp4: true` part from the manifest since DHCP is not necessary, and then append the relevant parts: `addresses` and `routes`, specifying the IP address and the default gateway. The `#@overlay/match missing_ok=True` is used as a matcher, to determine where to insert the configuration. the `missing_ok=True` flag is used to declare that if the inserted section is not already present in the manifest, ytt is "permitted" to add it to append the information.
 
-So, we can now modify our `values.yaml` file and set the `ip_address`, `cidr`, and `gateway` variables. For example:
+So, we can now modify our `values.yaml` file and set the `ip_address`, `cidr`, and `gateway` variables. Note that `values.yaml` files need to be declared in the first line of the file by specifying `#@data/values-schema`. For example:
 
 ```yaml
-#@data/values
+#@data/values-schema
 ---
 ip_address: "192.168.1.50"
 cidr: "24"
@@ -112,10 +112,10 @@ network:
 
 The other two conditions perform the same thing for DNS servers and DNS search paths.
 
-If we would like ytt to also render the configuration for DNS servers and search paths, we can can modify our `values.yaml` file and set the `dns_servers` and `search_paths` variables. For example:
+If we would like ytt to also render the configuration for DNS servers and search paths, we can modify our `values.yaml` file and set the `dns_servers` and `search_paths` variables. For example:
 
 ```yaml
-#@data/values
+#@data/values-schema
 ---
 ip_address: "192.168.1.50"
 cidr: "24"

@@ -1,0 +1,8 @@
+#@data/values-schema
+---
+namespace: dev
+app_name: spring-petclinic
+app_image: springio/petclinic:latest
+app_port: 8080
+svc_port: 80
+svc_type: ClusterIP
